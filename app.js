@@ -10,6 +10,9 @@ var adminRouter = require('./routes/admin');
 var hbs = require('express-handlebars');
 var fileupload = require('express-fileupload');
 var db = require('./config/connection');
+var session = require('express-session');
+//var expressvalidator = require('express-validator');
+
 // end added by vibin
 var app = express();
 
@@ -23,9 +26,11 @@ app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// start added by vibin
+//app.use(expressvalidator());
+// end added by vibin
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// start added by vibin
 app.use(fileupload());
 db.connect((err)=>{
   if(err)
@@ -33,6 +38,7 @@ db.connect((err)=>{
   else
     console.log('database connected to the port 27017')
 });
+app.use(session({secret:'secretkey123', cookie:{maxAge:60000}}));
 // end added by vibin
 
 app.use('/', userRouter);
@@ -52,6 +58,8 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+
+  
 });
 
 module.exports = app;
