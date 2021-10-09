@@ -13,10 +13,9 @@ router.get('/', function (req, res, next) {
 
 });
 
-
 router.get('/add-products', function (req, res) {
 
-  res.render('admin/add-products');
+  res.render('admin/add-products',{admin: true});
 
 });
 
@@ -68,36 +67,53 @@ router.get('/edit-product/:Id', (req, res) => {
   let prodId = req.params.Id
   productHelpers.getProductDetail(prodId).then((product) => {
     console.log(product)
-    res.render('admin/edit-products', { product });
+    res.render('admin/edit-products', { admin: true, product });
   })
 
 });
 
 router.post('/edit-product/:Id', (req, res) => {
- 
+
   let prodId = req.params.Id
-  console.log(prodId)    
+  console.log(prodId)
   console.log("hai update")
-  let image = req.files.image
-  var ImageName = req.files.image.name
-  var extension = (path.extname(ImageName));
+
+  let extension = '', imageExtention = '';
+  let image
+
+  if (req.files) {
+    image = req.files.image;
+    let ImageName = req.files.image.name;
+    extension = path.extname(ImageName);
+  }
+  else {
+    imageExtention: req.body.imageExtention;
+  }
+
   let products = {
     name: req.body.name,
     category: req.body.category,
     description: req.body.description,
-    imageExtention: extension
+    imageExtention: (extension == "" ? imageExtention : extension)
   }
 
   productHelpers.updatetProduct(prodId, products).then((id) => {
 
-    image.mv('./public/product_images/' + id + extension, (err, done) => {
-      if (!err) {
-        res.redirect('/admin');
-      }
-      else {
-        console.log('error while saving image ' + err)
-      }
-    })
+    if (extension != "") {
+
+      image.mv('./public/product_images/' + id + extension, (err, done) => {
+        if (!err) {
+          res.redirect('/admin');
+        }
+        else {
+          console.log('error while saving image ' + err)
+        }
+      })
+
+    }
+    else {
+      res.redirect('/admin');
+    }
 
   })
 

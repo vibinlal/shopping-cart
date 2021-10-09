@@ -16,15 +16,30 @@
                     <input type="text" name="description" class="form-control" value="{{product.description}}">
 
                     <label for="">Image</label>
-                    <img src="/product_images/{{product._id}}{{product.imageExtention}}" alt="" style="width: 100px;height:auto;">
-                    <input type="file" name="image" class="form-control" >
+                    <img src="/product_images/{{product._id}}{{product.imageExtention}}" alt=""
+                        style="width: 100px;height:auto;" id="ImgView" class="pt-3">
 
-                    <button type="submit" class="btn btn-success mt-4" >Submit</button>
+                    <input type="file" name="image" class="form-control" onchange="viewImage(event)">
+
+                    <input type="hidden" name="imageExtention" value="{{product.imageExtention}}">
+
+
+                    <button type="submit" class="btn btn-success mt-4">Submit</button>
 
                 </form>
             </div>
 
 
         </div>
+
+
     </div>
 </section>
+
+<script>
+
+    function viewImage(event)
+    {
+        document.getElementById('ImgView').src= URL.createObjectURL(event.target.files[0])
+    }
+</script>

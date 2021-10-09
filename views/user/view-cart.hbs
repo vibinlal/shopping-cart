@@ -1,0 +1,32 @@
+<section>
+
+    <div class="container">
+
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+              
+                {{#each products}}
+                <tr>
+                    <th scope="row"> {{@index}}</th>
+                    <td>{{this.Product}}</td>
+                    <td>{{this.Quantity}}</td>
+                    <td>{{this.Price}}</td>
+                    <td>{{this.Total}}</td>
+                </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+
+
+    </div>
+</section>

@@ -1,6 +1,7 @@
 var db = require('../config/connection')
 var collection = require('../config/collections')
 const bcrypt = require('bcrypt')
+var ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
 
@@ -55,13 +56,40 @@ module.exports = {
         })
     },
 
-    findUserByEmail:(EmailId)=>{
+    findUserByEmail: (EmailId) => {
         console.log('EmailId' + EmailId)
-        return new Promise(async(resolve,reject)=>{
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({email:EmailId})
+        return new Promise(async (resolve, reject) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: EmailId })
             console.log(user)
             resolve(user)
         })
-    }
+    },
+
+    addToCart: (prodId, userId) => {
+
+        return new Promise(async (resolve, reject) => {
+            let userCart = await db.get().collection(collection.CART_COLLECTION).findOne({ userId: ObjectId(userId), ProdId: ObjectId(prodId) })
+            if (userCart) {
+                db.get().collection(collection.CART_COLLECTION).update({ userId: ObjectId(userId), ProdId: ObjectId(prodId) }, {
+                    $inc: { Count: 1 }
+                }).then((resposne) => {
+                    resolve(resposne)
+                })
+            }
+            else {
+                let cartObj = {
+                    userId: ObjectId(userId),
+                    ProdId: ObjectId(prodId),
+                    Count: 1
+                }
+
+                db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((resposne) => {
+                    resolve(resposne)
+                })
+            }
+        })
+
+    },
+
 
 }

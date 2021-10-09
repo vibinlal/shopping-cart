@@ -111,5 +111,19 @@ router.get('/logout', function (req, res, next) {
 
 });
 
+router.get('/cart', function (req, res, next) {
+
+  res.render('user/cart', { errors: req.session.errors });
+  req.session.errors = null
+
+});
+
+router.get('/add-to-cart/:Id', function (req, res) {
+  let prodId = req.params.Id
+  userHelpers.addToCart(prodId, req.session.user._id).then((response) => {
+    res.redirect('/');
+  })
+
+});
 
 module.exports = router;
