@@ -38,7 +38,7 @@ db.connect((err)=>{
   else
     console.log('database connected to the port 27017')
 });
-app.use(session({secret:'secretkey123', cookie:{maxAge:60000}}));
+app.use(session({secret:'secretkey123', resave:false, saveUninitialized:false, cookie:{maxAge:60000}}));
 // end added by vibin
 
 app.use('/', userRouter);

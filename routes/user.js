@@ -34,6 +34,7 @@ router.get('/signup', function (req, res, next) {
 router.post('/signup', uservalidator.validateUserMaster, function (req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    
     req.session.errors = errors.array();
     res.redirect('/signup');
   }
@@ -44,6 +45,7 @@ router.post('/signup', uservalidator.validateUserMaster, function (req, res, nex
       name: req.body.name,
       password: req.body.password,
       email: req.body.email,
+      phonenumber: req.body.phonenumber,
       isUser: 1
     }
 
