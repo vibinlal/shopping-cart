@@ -1,1 +1,1 @@
-It is Node JS Application
+It is Node.js Application
